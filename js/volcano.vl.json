@@ -1,0 +1,54 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "width": 1000,
+  "height": 600,
+  "title": "Volcanoes above sea level (elevation and last eruption year)",
+  "projection": {"type": "equirectangular"},
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/KaneSec/vega_lite/main/2_symbol_map/js/ne_110m_admin_0_countries.topojson",
+        "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+      },
+      "mark": {"type": "geoshape", "fill": "darkgray", "stroke": "white"}
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/warhmk/FIT3179_simple_vega-lite/master/data/volcano.csv"
+      },
+      "encoding": {
+        "longitude": {"field": "longitude", "type": "quantitative"},
+        "latitude": {"field": "latitude", "type": "quantitative"},
+        "tooltip": [
+          {"field": "country", "title": "country"},
+          {"field": "volcano name", "title": "volcano name"},
+          {"field": "elevation", "title": "elevation"},
+          {"field": "last eruption year", "title": "last eruption"}
+        ]
+      },
+      "layer": [
+        {
+          "mark": {"type": "circle"},
+          "encoding": {
+            "size": {
+              "field": "elevation",
+              "type": "quantitative",
+              "title": "elevetion (m)",
+              "scale": {"domain": [0, 6879]}
+            },
+            "color": {
+              "field": "last eruption year",
+              "type": "quantitative",
+              "scale": {
+                "type": "threshold",
+                "domain": [-5000, 0, 1000, 2000, 2020],
+                "range": ["#ffb1b1", "#ff8989", "#ff6262", "#ff0000", "#d80000"]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "config": {}
+}
