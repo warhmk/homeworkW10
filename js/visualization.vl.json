@@ -1,0 +1,85 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "width": 600,
+  "height": 500,
+  "title": "University Ranking 2016 by Times Higher Education World University Ranking",
+  "data": {
+    "url": "https://raw.githubusercontent.com/warhmk/homeworkW10/master/data/timesData.csv"
+  },
+  "params": [
+    {
+      "name": "num_student_above",
+      "value": 0,
+      "bind": {
+        "input": "range",
+        "min": 0,
+        "max": 50000,
+        "step": 100,
+        "name": "Number of students: "
+      }
+    }
+  ],
+  "transform": [{"filter": "datum.num_students > num_student_above"}],
+  "encoding": {
+    "x": {"field": "world_rank", "type": "quantitative", "title": "Ranking"},
+    "y": {"field": "research", "type": "quantitative", "title": "Research"}
+  },
+  "layer": [
+    {
+      "selection": {
+        "country_highlight": {
+          "type": "multi",
+          "fields": ["country"],
+          "bind": "legend"
+        }
+      },
+      "mark": "circle",
+      "encoding": {
+        "color": {"field": "country", "type": "nominal"},
+        "opacity": {
+          "condition": {"selection": "country_highlight", "value": 0.8},
+          "value": 0.1
+        },
+        "size": {"field": "num_students", "type": "quantitative"},
+        "tooltip": [
+          {"field": "university_name", "title": "university name"},
+          {"field": "world_rank", "title": "ranking"},
+          {"field": "country"},
+          {"field": "research"},
+          {"field": "citations"},
+          {"field": "num_students", "title": "number of students"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "dx": -12,
+        "fontSize": 10,
+        "fontStyle": "italic"
+      },
+      "encoding": {
+        "text": {"field": "university_name", "type": "nominal"},
+        "color": {"value": "black"},
+        "opacity": {
+          "condition": {
+            "test": "datum['university_name'] == 'California Institute of Technology' || datum['university_name'] == 'Massachusetts Institute of Technology' || datum['university_name'] == 'King’s College London' || datum['university_name'] == 'University of Tokyo' || datum['university_name'] == 'Monash University' || datum['university_name'] == 'Seoul National University'  || datum['university_name'] == 'University of Western Australia' || datum['university_name'] == 'University of Liverpool' || datum['university_name'] == 'Lomonosov Moscow State University'",
+            "value": 1
+          },
+          "value": 0
+        },
+        "tooltip": [
+          {"field": "university_name", "title": "university name"},
+          {"field": "world_rank", "title": "ranking"},
+          {"field": "country"},
+          {"field": "research"},
+          {"field": "citations"},
+          {"field": "num_students", "title": "number of students"}
+        ]
+      }
+    }
+  ],
+  "config": {}
+}
